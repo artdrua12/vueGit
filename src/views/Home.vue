@@ -1,18 +1,27 @@
 <template>
   <div class="home">
-    <img alt="Vue logo" src="../assets/logo.png">
-    <HelloWorld msg="Welcome to Your Vue.js App"/>
+    <h1>Введите URL</h1>
+    <input placeholder="Enter URL" @keyup="keyup" />
   </div>
 </template>
 
 <script>
-// @ is an alias to /src
-import HelloWorld from '@/components/HelloWorld.vue'
-
 export default {
-  name: 'Home',
-  components: {
-    HelloWorld
-  }
-}
+  data() {
+    return {};
+  },
+  methods: {
+    keyup() {
+      console.log("up");
+    }
+  },
+  components: {}
+};
 </script>
+
+<style scoped>
+.home {
+  display: flex;
+  flex-direction: column;
+}
+</style>
