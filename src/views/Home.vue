@@ -1,18 +1,28 @@
 <template>
   <div class="home">
     <h1>Введите URL</h1>
-    <input placeholder="Enter URL" @keyup="keyup" />
+    <input v-model="users" placeholder="Enter URL" @keyup="keyup" />
+    <div>{{searchUsers}}</div>
+    <img :src="searchUsers.avatar_url" width="200px">
   </div>
 </template>
 
 <script>
 export default {
   data() {
-    return {};
+    return {
+      users: ""
+    };
+  },
+  computed: {
+    searchUsers(){
+      return this.$store.state.searchUsers
+    }
   },
   methods: {
     keyup() {
-      console.log("up");
+      console.log(" users", this.searchUsers);
+      this.$store.dispatch("search",this.users);
     }
   },
   components: {}
