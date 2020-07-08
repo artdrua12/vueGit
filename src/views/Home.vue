@@ -2,8 +2,10 @@
   <div class="home">
     <h1>Введите URL</h1>
     <input v-model="users" placeholder="Enter URL" @keyup="keyup" />
-    <div>{{searchUsers}}</div>
-    <img :src="searchUsers.avatar_url" width="200px">
+    <div v-for="item in searchUsers.items" :key="item.id" >
+      <h2>{{item.login}}</h2>
+    <img :src="item.avatar_url" width="200px">
+    </div>
   </div>
 </template>
 
@@ -11,7 +13,7 @@
 export default {
   data() {
     return {
-      users: ""
+      users: "",
     };
   },
   computed: {

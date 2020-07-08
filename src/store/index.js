@@ -5,7 +5,7 @@ Vue.use(Vuex)
 
 export default new Vuex.Store({
   state: {
-    searchUsers: ""
+    searchUsers: "",
   },
   mutations: {
     changeSearchUsers(state, payload) {
@@ -15,7 +15,7 @@ export default new Vuex.Store({
   actions: {
     async search(context, user) {
       const response = await fetch(
-        `https://api.github.com/users/${user}`
+        `https://api.github.com/search/users?q=${user}&per_page=20`
       );
       const res = await response.json();
       context.commit('changeSearchUsers', res);
