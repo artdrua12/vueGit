@@ -9,20 +9,20 @@
         label="Имя в Git"
         required
         class="home__users"
-        @keyup.self="debouce(keyup)"
+        @keyup.self="keyup"
       ></v-text-field>
-      <v-pagination v-model="page" :total-visible="7" :length="length"></v-pagination>
-      <v-text-field
+      <v-pagination v-model="page" :total-visible="7" :length="length" @input="search"></v-pagination>
+      <v-select
+        :items="items"
         v-model="visible"
+        @change="keyup"
         label="Количество"
-        max="70"
-        min="1"
-        step="1"
-        type="number"
-        @keyup.self="debouce(keyup)"
-      ></v-text-field>
+        class="home__select"
+      ></v-select>
     </div>
-    <router-link tag="div" :to="'/about/'+item.login"
+    <router-link
+      tag="div"
+      :to="'/about/'+item.login"
       v-for="item in searchUsers.items"
       :key="item.id"
       class="home__users"
@@ -39,7 +39,8 @@ export default {
     return {
       users: "",
       totalVisible: "",
-      visible: "20",
+      visible: 20,
+      items: [10, 20, 30, 40, 50],
       page: 0,
       nameRules: [
         v => !!v || "Необходимо ввести имя",
@@ -53,20 +54,29 @@ export default {
       return this.$store.state.searchUsers;
     },
     length() {
-      return Math.ceil(this.searchUsers.total_count / this.visible);
+      let count = this.searchUsers.total_count;
+      if (count > 1000) {
+        count = 1000;
+      }
+      return Math.ceil(count / this.visible) || 0;
     }
   },
   methods: {
     keyup() {
-      console.log(" users", this.searchUsers);
-      this.$store.dispatch("search", {
+      this.page = 0;
+      this.debouce(this.search);
+    },
+    async search() {
+      await this.$store.dispatch("search", {
         visible: this.visible,
-        users: this.users
+        users: this.users,
+        page: this.page
       });
+      console.log("user", this.searchUsers);
     },
     debouce(fun) {
       clearTimeout(this.timeout);
-      this.timeout = setTimeout(fun, 700);
+      this.timeout = setTimeout(fun, 500);
     }
   },
   components: {}
@@ -96,7 +106,10 @@ export default {
   align-items: center;
 }
 .home__users {
-  flex: 1 1 50%;
+  flex: 4 1 400px;
   margin-right: auto;
+}
+.home__select {
+  flex: 1 0 40px;
 }
 </style>

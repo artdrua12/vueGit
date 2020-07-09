@@ -8,7 +8,7 @@
 export default {
   data() {
     return {
-      login: this.$route.params["login"]
+      login: this.$route.params["login"] ?? "Логин не определен"
     };
   },
   watch: {
