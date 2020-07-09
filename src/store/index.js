@@ -13,9 +13,9 @@ export default new Vuex.Store({
     }
   },
   actions: {
-    async search(context, user) {
+    async search(context, obj) {
       const response = await fetch(
-        `https://api.github.com/search/users?q=${user}&per_page=20`
+        `https://api.github.com/search/users?q=${obj.users}&per_page=${obj.visible}`
       );
       const res = await response.json();
       context.commit('changeSearchUsers', res);

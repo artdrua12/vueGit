@@ -2,21 +2,34 @@
   <div class="home">
     <h1 class="app__fullWidth">Введите имя пользователя Git</h1>
     <div class="app__fullWidth home__header">
-      >
       <v-text-field
         v-model="users"
         :rules="nameRules"
         :counter="12"
         label="Имя в Git"
         required
-        @keyup="keyup"
+        class="home__users"
+        @keyup.self="debouce(keyup)"
       ></v-text-field>
-      <v-pagination v-model="page" :length="7"></v-pagination>
+      <v-pagination v-model="page" :total-visible="7" :length="length"></v-pagination>
+      <v-text-field
+        v-model="visible"
+        label="Количество"
+        max="70"
+        min="1"
+        step="1"
+        type="number"
+        @keyup.self="debouce(keyup)"
+      ></v-text-field>
     </div>
-    <div v-for="item in searchUsers.items" :key="item.id" class="home__users">
+    <router-link tag="div" :to="'/about/'+item.login"
+      v-for="item in searchUsers.items"
+      :key="item.id"
+      class="home__users"
+    >
       <h2>{{item.login}}</h2>
       <img :src="item.avatar_url" width="200px" />
-    </div>
+    </router-link>
   </div>
 </template>
 
@@ -25,6 +38,8 @@ export default {
   data() {
     return {
       users: "",
+      totalVisible: "",
+      visible: "20",
       page: 0,
       nameRules: [
         v => !!v || "Необходимо ввести имя",
@@ -36,16 +51,22 @@ export default {
   computed: {
     searchUsers() {
       return this.$store.state.searchUsers;
+    },
+    length() {
+      return Math.ceil(this.searchUsers.total_count / this.visible);
     }
   },
   methods: {
     keyup() {
       console.log(" users", this.searchUsers);
-      this.$store.dispatch("search", this.users);
+      this.$store.dispatch("search", {
+        visible: this.visible,
+        users: this.users
+      });
     },
-    debouce(fn) {
+    debouce(fun) {
       clearTimeout(this.timeout);
-      this.timeout = setTimeout(fn, 500);
+      this.timeout = setTimeout(fun, 700);
     }
   },
   components: {}
@@ -57,6 +78,7 @@ export default {
   max-width: 1200px;
   min-height: 100%;
   margin: auto;
+  padding: 50px 20px 20px 20px;
 
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
@@ -67,13 +89,14 @@ export default {
   text-align: center;
 }
 .home__header {
-  width: 90%;
+  width: 100%;
   display: flex;
   flex-wrap: wrap;
   justify-content: space-evenly;
   align-items: center;
 }
-h1 {
-  margin-top: 32px;
+.home__users {
+  flex: 1 1 50%;
+  margin-right: auto;
 }
 </style>
