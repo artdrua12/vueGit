@@ -6,7 +6,6 @@ Vue.use(Vuex)
 export default new Vuex.Store({
   state: {
     searchUsers: "",
-    about: '/about/пользователь_не_выбран',
     tabs: []
   },
   mutations: {
@@ -14,10 +13,12 @@ export default new Vuex.Store({
       state[obj.name] = obj.value;
     },
     setTabs(state, name) {
+      const dublicate = state.tabs.findIndex(item => item.name == name);
+      if (dublicate != -1) return
       state.tabs.push({ href: `/about/${name}`, name: name })
     },
     deleteTabs(state, i) {
-      state.tabs.splice(i,1);
+      state.tabs.splice(i, 1);
     }
   },
   actions: {
