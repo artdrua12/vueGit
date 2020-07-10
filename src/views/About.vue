@@ -6,16 +6,19 @@
 </template>
 <script>
 export default {
+  props: ['login'],
   data() {
     return {
-      login: this.$route.params["login"] ?? "Логин не определен"
     };
   },
-  watch: {
-    $route(to) {
-      this.login = to.params["login"];
-    }
-  }
+  mounted() {
+   
+  },
+  // watch: {
+  //   $route(to) {
+  //     this.login = to.params["login"];
+  //   }
+  // }
 };
 </script>
 

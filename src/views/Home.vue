@@ -28,7 +28,7 @@
       class="home__users"
     >
       <h2>{{item.login}}</h2>
-      <img :src="item.avatar_url" width="200px" />
+      <img :src="item.avatar_url" @click="addTabs(item.login)" width="200px" />
     </router-link>
   </div>
 </template>
@@ -77,6 +77,9 @@ export default {
     debouce(fun) {
       clearTimeout(this.timeout);
       this.timeout = setTimeout(fun, 500);
+    },
+    addTabs(login) {
+      this.$store.commit("setTabs", login);
     }
   },
   components: {}

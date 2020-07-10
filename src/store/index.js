@@ -6,10 +6,18 @@ Vue.use(Vuex)
 export default new Vuex.Store({
   state: {
     searchUsers: "",
+    about: '/about/пользователь_не_выбран',
+    tabs: []
   },
   mutations: {
-    changeSearchUsers(state, payload) {
-      state.searchUsers = payload;
+    set(state, obj) {
+      state[obj.name] = obj.value;
+    },
+    setTabs(state, name) {
+      state.tabs.push({ href: `/about/${name}`, name: name })
+    },
+    deleteTabs(state, i) {
+      state.tabs.splice(i,1);
     }
   },
   actions: {
@@ -18,7 +26,7 @@ export default new Vuex.Store({
         `https://api.github.com/search/users?q=${obj.users}&per_page=${obj.visible}&page=${obj.page}`
       );
       const res = await response.json();
-      context.commit('changeSearchUsers', res);
+      context.commit('set', { name: 'searchUsers', value: res });
     }
   },
   modules: {

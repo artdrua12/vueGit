@@ -13,13 +13,20 @@
       <template v-slot:extension>
         <v-tabs>
           <v-tab to="/">Home</v-tab>
-          <v-tab to="/about">About</v-tab>
+          <v-tab v-for="(item,i) in tabs" :to="item.href" :key="item.name">
+            {{item.name}}
+            <v-btn icon color="deep-orange" @click="deleteTab(i)">
+              <v-icon>mdi-delete</v-icon>
+            </v-btn>
+          </v-tab>
         </v-tabs>
       </template>
     </v-app-bar>
 
     <v-content>
-      <router-view></router-view>
+      <keep-alive>
+        <router-view></router-view>
+      </keep-alive>
     </v-content>
   </v-app>
 </template>
@@ -27,16 +34,24 @@
 <script>
 export default {
   name: "App",
-
-  components: {},
-
-  data: () => ({
-    //
-  })
+  data() {
+    return {};
+  },
+  methods: {
+    deleteTab(i) {
+      this.$store.commit("deleteTabs", i);
+      this.$router.go(-1);
+    }
+  },
+  computed: {
+    tabs() {
+      return this.$store.state.tabs;
+    }
+  }
 };
 </script>
 <style>
-.app__fullWidth{
+.app__fullWidth {
   grid-column: -1/1;
 }
 </style>
