@@ -6,16 +6,26 @@ Vue.use(Vuex)
 export default new Vuex.Store({
   state: {
     searchUsers: "",
-    tabs: []
+    repositories: {},
+    tabs: [],
+    tab: 0
   },
   mutations: {
     set(state, obj) {
       state[obj.name] = obj.value;
     },
-    setTabs(state, name) {
-      const dublicate = state.tabs.findIndex(item => item.name == name);
+    setTabs(state, obj) {
+      const dublicate = state.tabs.findIndex(item => item.login == obj.login);
       if (dublicate != -1) return
-      state.tabs.push({ href: `/about/${name}`, name: name })
+      state.tabs.push(obj);
+    },
+    setRepositories(state, obj) {
+      Vue.set(state.repositories, obj.name, obj.value)
+    },
+    setTab(state,value) {
+      Vue.set(state, 'tab', value)
+      console.log('d',value);
+      
     },
     deleteTabs(state, i) {
       state.tabs.splice(i, 1);
@@ -28,6 +38,13 @@ export default new Vuex.Store({
       );
       const res = await response.json();
       context.commit('set', { name: 'searchUsers', value: res });
+    },
+    async searchRepositories(context, user) {
+      const response = await fetch(
+        `https://api.github.com/users/${user}/repos`
+      );
+      const res = await response.json();
+      context.commit('setRepositories', { name: 'repositories', value: res });
     }
   },
   modules: {

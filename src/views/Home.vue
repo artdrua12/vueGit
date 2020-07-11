@@ -1,5 +1,5 @@
 <template>
-  <div class="home">
+  <div class="home app__main">
     <h1 class="app__fullWidth">Введите имя пользователя Git</h1>
     <div class="app__fullWidth home__header">
       <v-text-field
@@ -9,6 +9,7 @@
         label="Имя в Git"
         required
         class="home__users"
+        placeholder="Начните вводить имя, данные подгрузятся авноматически"
         @keyup.self="keyup"
       ></v-text-field>
       <v-pagination v-model="page" :total-visible="7" :length="length" @input="search"></v-pagination>
@@ -20,16 +21,18 @@
         class="home__select"
       ></v-select>
     </div>
-    <router-link
-      tag="div"
-      :to="'/about/'+item.login"
-      v-for="item in searchUsers.items"
-      :key="item.id"
-      class="home__users"
-    >
+    <v-progress-circular
+      v-if="loading"
+      class="app__fullWidth"
+      indeterminate
+      :size="120"
+      :width="12"
+      color="blue"
+    ></v-progress-circular>
+    <div v-for="item in searchUsers.items" :key="item.id" class="home__users">
       <h2>{{item.login}}</h2>
-      <img :src="item.avatar_url" @click="addTabs(item.login)" width="200px" />
-    </router-link>
+      <img :src="item.avatar_url" @click="addTabs(item.login,item.avatar_url)" width="200px" />
+    </div>
   </div>
 </template>
 
@@ -42,6 +45,7 @@ export default {
       visible: 20,
       items: [10, 20, 30, 40, 50],
       page: 0,
+      loading: false,
       nameRules: [
         v => !!v || "Необходимо ввести имя",
         v => v.length <= 12 || "Имя должно быть не более 12 символов"
@@ -67,32 +71,33 @@ export default {
       this.debouce(this.search);
     },
     async search() {
-      await this.$store.dispatch("search", {
-        visible: this.visible,
-        users: this.users,
-        page: this.page
-      });
+      try {
+        this.loading = true;
+        await this.$store.dispatch("search", {
+          visible: this.visible,
+          users: this.users,
+          page: this.page
+        });
+      } finally {
+        this.loading = false;
+      }
       console.log("user", this.searchUsers);
     },
     debouce(fun) {
       clearTimeout(this.timeout);
       this.timeout = setTimeout(fun, 500);
     },
-    addTabs(login) {
-      this.$store.commit("setTabs", login);
+    async addTabs(login, avatar) {
+      await this.$store.dispatch("searchRepositories", login);
+      this.$store.commit("setTabs", { login, avatar });
+      this.$store.commit("setTab",this.$store.state.tabs.length);
     }
-  },
-  components: {}
+  }
 };
 </script>
 
 <style scoped>
 .home {
-  max-width: 1200px;
-  min-height: 100%;
-  margin: auto;
-  padding: 50px 20px 20px 20px;
-
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
   grid-template-rows: 1fr, auto;

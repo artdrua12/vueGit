@@ -11,11 +11,12 @@
     >
       <v-toolbar-title>Навигация</v-toolbar-title>
       <template v-slot:extension>
-        <v-tabs>
-          <v-tab to="/">Home</v-tab>
-          <v-tab v-for="(item,i) in tabs" :to="item.href" :key="item.name">
-            {{item.name}}
-            <v-btn icon color="deep-orange" @click="deleteTab(i)">
+        <v-tabs v-model="tab" align-with-title>
+          <v-tabs-slider color="yellow"></v-tabs-slider>
+          <v-tab key="home">Home</v-tab>
+          <v-tab v-for="(item,i) in tabs" :key="item.login">
+            {{ item.login }}
+            <v-btn icon color="red" @click="deleteTab(i)">
               <v-icon>mdi-delete</v-icon>
             </v-btn>
           </v-tab>
@@ -23,15 +24,21 @@
       </template>
     </v-app-bar>
 
-    <v-content>
-      <keep-alive>
-        <router-view></router-view>
-      </keep-alive>
-    </v-content>
+    <v-main>
+      <v-tabs-items v-model="tab">
+        <v-tab-item key="home">
+          <router-view></router-view>
+        </v-tab-item>
+        <v-tab-item v-for="item in tabs" :key="item.login">
+          <about :obj="item" />
+        </v-tab-item>
+      </v-tabs-items>
+    </v-main>
   </v-app>
 </template>
 
 <script>
+import About from "@/views/About.vue";
 export default {
   name: "App",
   data() {
@@ -40,18 +47,34 @@ export default {
   methods: {
     deleteTab(i) {
       this.$store.commit("deleteTabs", i);
-      this.$router.go(-1);
     }
   },
   computed: {
     tabs() {
       return this.$store.state.tabs;
+    },
+    tab: {
+      get() {
+        return this.$store.state.tab;
+      },
+      set(value) {
+        this.$store.commit("setTab", value);
+      }
     }
+  },
+  components: {
+    About
   }
 };
 </script>
 <style>
 .app__fullWidth {
   grid-column: -1/1;
+}
+.app__main {
+  max-width: 1200px;
+  min-height: 100%;
+  margin: auto;
+  padding: 50px 20px 20px 20px;
 }
 </style>
