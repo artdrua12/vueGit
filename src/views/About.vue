@@ -1,5 +1,5 @@
 <template>
-  <div class="about app__main ">
+  <div class="about app__main">
     <img :src="obj.avatar" width="150px" />
     <h1>{{obj.login}}</h1>
     <!-- <h3 v-for="item in repositories" :key="item.name">{{item.name}}</h3> -->
@@ -15,7 +15,16 @@
           hide-details
         ></v-text-field>
       </v-card-title>
-      <v-data-table :headers="headers" :items="repositories" :search="search"></v-data-table>
+      <v-data-table :headers="headers" :items="repositories" :search="search">
+        <template v-slot:no-data>
+          <v-btn color="primary">Reset, No data</v-btn>
+        </template>
+        <template v-slot:item.fork="{ item }">
+          <v-btn @click="createFork(item)" :disabled="item.forks==0" tile outlined color="success">
+            <v-icon left>mdi-widgets</v-icon>Fork
+          </v-btn>
+        </template>
+      </v-data-table>
     </v-card>
   </div>
 </template>
@@ -33,11 +42,18 @@ export default {
       headers: [
         { text: "name Rep", value: "name" },
         { text: "Полное имя", value: "full_name" },
-        { text: "Fors", value: "forks" },
-        { text: "Ссылка на репозиторий", value: "url" }
+        { text: "Forks", value: "forks" },
+        { text: "Ссылка на репозиторий", value: "url" },
+        { text: "Получить Fork", value: "fork" }
       ],
       search: ""
     };
+  },
+  methods: {
+    async createFork(item) {
+      await this.$store.dispatch("createFork", item);
+      console.log("item", item);
+    }
   },
   mounted() {
     this.repositories = this.$store.state.repositories.repositories;
