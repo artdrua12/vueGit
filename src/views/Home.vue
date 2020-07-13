@@ -21,18 +21,27 @@
         class="home__select"
       ></v-select>
     </div>
-    <v-progress-circular
-      v-if="loading"
-      class="app__fullWidth"
-      indeterminate
-      :size="120"
-      :width="12"
-      color="blue"
-    ></v-progress-circular>
+    <div class="app__fullWidth home__progress">
+      <v-progress-circular
+        v-if="loading"
+        indeterminate
+        :size="200"
+        :width="15"
+        color="yellow"
+      ></v-progress-circular>
+    </div>
     <div v-for="item in searchUsers.items" :key="item.id" class="home__users">
       <h2>{{item.login}}</h2>
       <img :src="item.avatar_url" @click="addTabs(item.login,item.avatar_url)" width="200px" />
     </div>
+    <v-dialog v-model="dialog" hide-overlay persistent width="300">
+      <v-card color="primary" dark>
+        <v-card-text>
+          Please stand by
+          <v-progress-linear indeterminate color="white" class="mb-0"></v-progress-linear>
+        </v-card-text>
+      </v-card>
+    </v-dialog>
   </div>
 </template>
 
@@ -46,6 +55,7 @@ export default {
       items: [10, 20, 30, 40, 50],
       page: 0,
       loading: false,
+      dialog: false,
       nameRules: [
         v => !!v || "Необходимо ввести имя",
         v => v.length <= 12 || "Имя должно быть не более 12 символов"
@@ -55,7 +65,9 @@ export default {
   },
   computed: {
     searchUsers() {
-      return this.$store.state.searchUsers;
+      const s = this.$store.state.searchUsers;
+      console.log("r", s);
+      return s;
     },
     length() {
       let count = this.searchUsers.total_count;
@@ -88,9 +100,10 @@ export default {
       this.timeout = setTimeout(fun, 500);
     },
     async addTabs(login, avatar) {
+      this.dialog = true;
       await this.$store.dispatch("searchRepositories", login);
       this.$store.commit("setTabs", { login, avatar });
-      this.$store.commit("setTab",this.$store.state.tabs.length);
+      this.dialog = false;
     }
   }
 };
@@ -120,4 +133,5 @@ export default {
 .home__select {
   flex: 1 0 40px;
 }
+
 </style>
