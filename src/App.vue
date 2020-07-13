@@ -1,6 +1,7 @@
 <template>
   <v-app>
     <v-app-bar
+      :collapse="!collapseOnScroll"
       app
       color="primary"
       dark
@@ -22,6 +23,9 @@
           </v-tab>
         </v-tabs>
       </template>
+      <v-spacer></v-spacer>
+
+      <v-checkbox v-model="collapseOnScroll" color="white" hide-details></v-checkbox>
     </v-app-bar>
 
     <v-main>
@@ -42,7 +46,9 @@ import About from "@/views/About.vue";
 export default {
   name: "App",
   data() {
-    return {};
+    return {
+      collapseOnScroll: true
+    };
   },
   methods: {
     deleteTab(i) {
