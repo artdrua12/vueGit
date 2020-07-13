@@ -8,7 +8,8 @@ export default new Vuex.Store({
     searchUsers: "",
     repositories: {},
     tabs: [],
-    tab: 0
+    tab: 0,
+    fork: []
   },
   mutations: {
     set(state, obj) {
@@ -52,12 +53,12 @@ export default new Vuex.Store({
       const res = await response.json();
       context.commit('setRepositories', { name: 'repositories', value: res });
     },
-    async createFork(context,obj) {
-      console.log('fork obj', obj);
+    async createFork(context, obj) {
       const response = await fetch(
         `https://api.github.com/repos/${obj.owner.login}/${obj.name}/forks`
       );
       const res = await response.json();
+      context.commit('set', { name: 'forks', value: res });
       console.log('fork', res);
 
 
