@@ -9,7 +9,10 @@ export default new Vuex.Store({
     repositories: {},
     tabs: [],
     tab: 0,
-    fork: []
+    fork: [],
+    snackbar: false,
+    snackbarObj: {},
+    favorites: []
   },
   mutations: {
     set(state, obj) {
@@ -19,11 +22,8 @@ export default new Vuex.Store({
       const dublicate = state.tabs.findIndex(item => item.login == obj.login);
       if (dublicate == -1) {
         state.tabs.push(obj);
-        console.log('len', state.tabs.length);
-
         Vue.set(state, 'tab', state.tabs.length)
       } else {
-        console.log('lend', dublicate + 1);
         Vue.set(state, 'tab', dublicate + 1);
       }
 
@@ -36,32 +36,60 @@ export default new Vuex.Store({
     },
     deleteTabs(state, i) {
       state.tabs.splice(i, 1);
+    },
+    addFavorite(state, obj) {
+      const dublicate = state.favorites.findIndex(item => item.id == obj.id);
+      if (dublicate != -1) return
+      state.favorites.push(obj);
+      state.snackbar = true
+    },
+    setSnackbar(state, obj) {
+      state.snackbarObj = obj;
+      state.snackbar = true;
     }
   },
   actions: {
     async search(context, obj) {
-      const response = await fetch(
-        `https://api.github.com/search/users?q=${obj.users}&per_page=${obj.visible}&page=${obj.page}`
-      );
-      const res = await response.json();
-      context.commit('set', { name: 'searchUsers', value: res });
+      try {
+        const response = await fetch(
+          `https://api.github.com/search/users?q=${obj.users}&per_page=${obj.visible}&page=${obj.page}`
+        );
+        const res = await response.json();
+        context.commit('set', { name: 'searchUsers', value: res });
+      } catch (e) {
+        context.commit("setSnackbar", {
+          color: "error",
+          text: "Ошибка запроса"
+        });
+      }
     },
     async searchRepositories(context, user) {
-      const response = await fetch(
-        `https://api.github.com/users/${user}/repos`
-      );
-      const res = await response.json();
-      context.commit('setRepositories', { name: 'repositories', value: res });
+      try {
+        const response = await fetch(
+          `https://api.github.com/users/${user}/repos`
+        );
+        const res = await response.json();
+        context.commit('setRepositories', { name: 'repositories', value: res });
+      } catch (e) {
+        context.commit("setSnackbar", {
+          color: "error",
+          text: "Ошибка запроса"
+        });
+      }
     },
     async createFork(context, obj) {
-      const response = await fetch(
-        `https://api.github.com/repos/${obj.owner.login}/${obj.name}/forks`
-      );
-      const res = await response.json();
-      context.commit('set', { name: 'forks', value: res });
-      console.log('fork', res);
-
-
+      try {
+        const response = await fetch(
+          `https://api.github.com/repos/${obj.owner.login}/${obj.name}/forks`
+        );
+        const res = await response.json();
+        context.commit('set', { name: 'forks', value: res });
+      } catch (e) {
+        context.commit("setSnackbar", {
+          color: "error",
+          text: "Ошибка запроса"
+        });
+      }
     }
   },
   modules: {

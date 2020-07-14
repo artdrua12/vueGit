@@ -11,10 +11,9 @@ const routes = [
     component: Home
   },
   {
-    name: 'about',
-    path: '/abouter/:login',
-    component: () => import(/* webpackChunkName: "about" */ '../views/About.vue'),
-    props: true
+    name: 'favorite',
+    path: '/favorite',
+    component: () => import(/* webpackChunkName: "favorite" */ '../views/Favorite.vue'),
   },
 ]
 

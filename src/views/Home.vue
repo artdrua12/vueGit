@@ -22,20 +22,14 @@
       ></v-select>
     </div>
     <div class="app__fullWidth home__progress">
-      <v-progress-circular
-        v-if="loading"
-        indeterminate
-        :size="200"
-        :width="15"
-        color="yellow"
-      ></v-progress-circular>
+      <v-progress-circular v-if="loading" indeterminate :size="200" :width="15" color="yellow"></v-progress-circular>
     </div>
     <div v-for="item in searchUsers.items" :key="item.id" class="home__users">
       <h2>{{item.login}}</h2>
       <img :src="item.avatar_url" @click="addTabs(item.login,item.avatar_url)" width="200px" />
     </div>
     <v-dialog v-model="dialog" hide-overlay persistent width="300">
-      <v-card color="primary" dark>
+      <v-card color="success" dark>
         <v-card-text>
           Please stand by
           <v-progress-linear indeterminate color="white" class="mb-0"></v-progress-linear>
@@ -88,10 +82,11 @@ export default {
           users: this.users,
           page: this.page
         });
+      } catch(e) {
+        console.log(e);
       } finally {
         this.loading = false;
       }
-      console.log("user", this.searchUsers);
     },
     debouce(fun) {
       clearTimeout(this.timeout);
@@ -131,5 +126,4 @@ export default {
 .home__select {
   flex: 1 0 40px;
 }
-
 </style>

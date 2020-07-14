@@ -11,6 +11,21 @@
       fade-img-on-scroll
     >
       <v-toolbar-title>Навигация</v-toolbar-title>
+
+      <v-spacer></v-spacer>
+
+      <router-link active-class="active" exact to="/">
+        <v-btn icon @click="toHome">
+          <v-icon large>mdi-magnify</v-icon>
+        </v-btn>
+      </router-link>
+
+      <router-link active-class="active" exact to="favorite">
+        <v-btn icon @click="toHome">
+          <v-icon large>mdi-heart</v-icon>
+        </v-btn>
+      </router-link>
+
       <template v-slot:extension>
         <v-tabs v-model="tab" align-with-title>
           <v-tabs-slider color="yellow"></v-tabs-slider>
@@ -23,9 +38,6 @@
           </v-tab>
         </v-tabs>
       </template>
-      <v-spacer></v-spacer>
-
-      <v-checkbox v-model="collapseOnScroll" color="white" hide-details></v-checkbox>
     </v-app-bar>
 
     <v-main>
@@ -37,6 +49,13 @@
           <about :obj="item" />
         </v-tab-item>
       </v-tabs-items>
+
+      <v-snackbar v-model="snackbar" :color="snackbarObj.color" :timeout="3000" right="right">
+        {{snackbarObj.text}}
+        <template v-slot:action="{ attrs }">
+          <v-btn dark text v-bind="attrs" @click="snackbar = false">Close</v-btn>
+        </template>
+      </v-snackbar>
     </v-main>
   </v-app>
 </template>
@@ -53,11 +72,25 @@ export default {
   methods: {
     deleteTab(i) {
       this.$store.commit("deleteTabs", i);
+    },
+    toHome() {
+      this.$store.commit("setTab", 0);
     }
   },
   computed: {
     tabs() {
       return this.$store.state.tabs;
+    },
+    snackbar: {
+      get() {
+        return this.$store.state.snackbar;
+      },
+      set(value) {
+        this.$store.commit("set", { name: "snackbar", value });
+      }
+    },
+    snackbarObj() {
+      return this.$store.state.snackbarObj;
     },
     tab: {
       get() {
@@ -78,9 +111,15 @@ export default {
   grid-column: -1/1;
 }
 .app__main {
-  max-width: 1200px;
+  max-width: 1500px;
   min-height: 100%;
   margin: auto;
   padding: 50px 20px 20px 20px;
+}
+a {
+  text-decoration: none;
+}
+.active {
+  border-bottom: 2px solid yellow;
 }
 </style>

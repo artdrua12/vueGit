@@ -26,6 +26,7 @@
             tile
             outlined
             color="success"
+            :loading="loading"
           >
             <v-icon left>mdi-widgets</v-icon>Fork
           </v-btn>
@@ -38,8 +39,17 @@
         <v-card-title class="headline">Forks</v-card-title>
         <v-data-table :headers="headersFork" :items="forks" :search="search">
           <template v-slot:item.stargazers_count="{ item }">
-            <v-rating v-model="item.stargazers_count"></v-rating>
-            
+            <v-rating
+              v-model="item.stargazers_count"
+              background-color="green lighten-3"
+              color="green lighten-7"
+              readonly
+            ></v-rating>
+          </template>
+          <template v-slot:item.favorite="{item}">
+            <v-btn tile outlined color="success" @click="addFaforite(item)">
+              <v-icon color="red" left>mdi-heart</v-icon>Add Faforite
+            </v-btn>
           </template>
         </v-data-table>
         <v-card-actions>
@@ -54,12 +64,19 @@
 export default {
   props: {
     obj: {
-      type: Object
+      type: Object,
+      default: function() {
+        return {
+          avatar: require("@/assets/flower.jpg"),
+          login: "no_user"
+        };
+      }
     }
   },
   data() {
     return {
       repositories: [],
+      forks: [],
       url: "",
       headers: [
         { text: "name Rep", value: "name" },
@@ -70,29 +87,46 @@ export default {
       ],
       headersFork: [
         { text: "Id", value: "id" },
-        { text: "name Rep", value: "name" },    
+        { text: "Имя репозитория", value: "name" },
         { text: "Размер", value: "size" },
         { text: "Дата создания", value: "created_at" },
-        { text: "ветка по умолчанию", value: "default_branch" },
-        { text: "Рейтинг", value: "stargazers_count" }
+        { text: "Ветка по умолчанию", value: "default_branch" },
+        { text: "Рейтинг", value: "stargazers_count" },
+        { text: "Избранное", value: "favorite" }
       ],
       search: "",
-      dialog: false
+      dialog: false,
+      loading: false
     };
   },
   methods: {
     async createFork(item) {
-      await this.$store.dispatch("createFork", item);
-      this.dialog = true;
+      try {
+        this.loading = true;
+        await this.$store.dispatch("createFork", item);
+        this.forks = await this.$store.state.forks;
+        this.dialog = true;
+        this.loading = false;
+      } catch (e) {
+        console.log(e);
+        this.$store.commit("setSnackbar", {
+          color: "error",
+          text: "Ошибка запроса"
+        });
+      } finally {
+        this.loading = false;
+      }
+    },
+    addFaforite(item) {
+      this.$store.commit("addFavorite", item);
+      this.$store.commit("setSnackbar", {
+        color: "success",
+        text: "Добавлено в избранное"
+      });
     }
   },
   mounted() {
     this.repositories = this.$store.state.repositories.repositories;
-  },
-  computed: {
-    forks() {
-      return this.$store.state.forks;
-    }
   }
 };
 </script>
