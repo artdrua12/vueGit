@@ -26,7 +26,6 @@ export default new Vuex.Store({
       } else {
         Vue.set(state, 'tab', dublicate + 1);
       }
-
     },
     setRepositories(state, obj) {
       Vue.set(state.repositories, obj.name, obj.value)
@@ -39,8 +38,12 @@ export default new Vuex.Store({
     },
     addFavorite(state, obj) {
       const dublicate = state.favorites.findIndex(item => item.id == obj.id);
-      if (dublicate != -1) return
-      state.favorites.push(obj);
+      if (dublicate == -1) {
+        state.favorites.push(obj);
+        state.snackbarObj = { color: 'success', text: 'Добавлено в избранное' }
+      } else {
+        state.snackbarObj = { color: 'info', text: 'Fork уже добавлен' }
+      }
       state.snackbar = true
     },
     setSnackbar(state, obj) {

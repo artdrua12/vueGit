@@ -119,10 +119,6 @@ export default {
     },
     addFaforite(item) {
       this.$store.commit("addFavorite", item);
-      this.$store.commit("setSnackbar", {
-        color: "success",
-        text: "Добавлено в избранное"
-      });
     }
   },
   mounted() {
