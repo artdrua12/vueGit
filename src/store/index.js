@@ -106,7 +106,6 @@ export default new Vuex.Store({
       try {
         const fbData = await fb.database().ref('forks').once('value')
         forksData = fbData.val();
-        console.log('forksData', forksData);
       } catch{
         commit("setSnackbar", { color: 'info', text: 'Ошибка чтения из FireBase' });
       }
