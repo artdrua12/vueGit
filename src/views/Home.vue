@@ -43,7 +43,7 @@
 export default {
   data() {
     return {
-      users: "",
+      users: "v",
       totalVisible: "",
       visible: 20,
       items: [10, 20, 30, 40, 50],
@@ -82,7 +82,7 @@ export default {
           users: this.users,
           page: this.page
         });
-      } catch(e) {
+      } catch (e) {
         console.log(e);
       } finally {
         this.loading = false;
@@ -98,6 +98,9 @@ export default {
       this.$store.commit("setTabs", { login, avatar });
       this.dialog = false;
     }
+  },
+  mounted() {
+    this.search();
   }
 };
 </script>
