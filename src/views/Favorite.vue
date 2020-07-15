@@ -57,7 +57,8 @@ export default {
   },
   methods: {
     deleteFavorite(item) {
-      this.$store.commit("deleteFavorite", item);
+      // this.$store.commit("deleteFavorite", item);
+       this.$store.dispatch("deleteFavorite", item);
     }
   }
 };

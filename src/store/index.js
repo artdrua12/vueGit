@@ -114,9 +114,16 @@ export default new Vuex.Store({
 
       Object.keys(forksData).forEach(key => {
         const item = forksData[key];
-        state.favorites.push(item);
+        state.favorites.push({ ...item, 'fbKey': key });
       })
-      console.log(state.favorites);
+    },
+    async deleteFavorite({ commit }, obj) {
+      try {
+        await fb.database().ref('forks').child(obj.fbKey).remove();
+        commit('deleteFavorite', obj);
+      } catch (e) {
+        commit("setSnackbar", { color: 'error', text: 'Ошибка доступа к FireBase' });
+      }
     }
   }
 })
