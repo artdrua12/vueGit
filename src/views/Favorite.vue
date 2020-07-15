@@ -25,7 +25,7 @@
           ></v-rating>
         </template>
         <template v-slot:item.deleteFork="{ item }">
-          <v-btn @click.stop="deleteFork(item)" tile outlined color="success">
+          <v-btn @click="deleteFavorite(item)" tile outlined color="success">
             <v-icon left color="red">mdi-delete</v-icon>Удалить из избранного
           </v-btn>
         </template>
@@ -55,7 +55,11 @@ export default {
       return this.$store.state.favorites;
     }
   },
-  methods: {}
+  methods: {
+    deleteFavorite(item) {
+      this.$store.commit("deleteFavorite", item);
+    }
+  }
 };
 </script>
 

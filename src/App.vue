@@ -77,6 +77,9 @@ export default {
       this.$store.commit("setTab", 0);
     }
   },
+  mounted(){
+    this.$store.dispatch("getFireBase");
+  },
   computed: {
     tabs() {
       return this.$store.state.tabs;

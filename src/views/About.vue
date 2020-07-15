@@ -21,7 +21,7 @@
         </template>
         <template v-slot:item.fork="{ item }">
           <v-btn
-            @click.stop="createFork(item)"
+            @click.stop="getFork(item)"
             :disabled="item.forks==0"
             tile
             outlined
@@ -47,7 +47,7 @@
             ></v-rating>
           </template>
           <template v-slot:item.favorite="{item}">
-            <v-btn tile outlined color="success" @click="addFaforite(item)">
+            <v-btn tile outlined color="success" @click="addFaforite(item)" :disabled="loadFavor">
               <v-icon color="red" left>mdi-heart</v-icon>Add Faforite
             </v-btn>
           </template>
@@ -96,14 +96,15 @@ export default {
       ],
       search: "",
       dialog: false,
-      loading: false
+      loading: false,
+      loadFavor: false
     };
   },
   methods: {
-    async createFork(item) {
+    async getFork(item) {
       try {
         this.loading = true;
-        await this.$store.dispatch("createFork", item);
+        await this.$store.dispatch("getFork", item);
         this.forks = await this.$store.state.forks;
         this.dialog = true;
         this.loading = false;
@@ -117,8 +118,10 @@ export default {
         this.loading = false;
       }
     },
-    addFaforite(item) {
-      this.$store.commit("addFavorite", item);
+    async addFaforite(item) {
+      this.loadFavor = true;
+      await this.$store.dispatch("addFavorites", item);
+      this.loadFavor = false;
     }
   },
   mounted() {
