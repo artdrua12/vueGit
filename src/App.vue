@@ -15,14 +15,14 @@
       <v-spacer></v-spacer>
 
       <router-link active-class="active" exact to="/">
-        <v-btn icon @click="toHome">
-          <v-icon large>mdi-magnify</v-icon>
+        <v-btn class="ma-2" tile outlined @click="toHome">
+          <v-icon color="success" left>mdi-magnify</v-icon>Поиск пользователей
         </v-btn>
       </router-link>
 
       <router-link active-class="active" exact to="favorite">
-        <v-btn icon @click="toHome">
-          <v-icon large>mdi-heart</v-icon>
+        <v-btn class="ma-2" tile outlined @click="toHome">
+          <v-icon color="red" left>mdi-heart</v-icon>Избранные forks
         </v-btn>
       </router-link>
 
@@ -77,7 +77,7 @@ export default {
       this.$store.commit("setTab", 0);
     }
   },
-  mounted(){
+  mounted() {
     this.$store.dispatch("getFireBase");
   },
   computed: {
