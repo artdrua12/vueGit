@@ -15,6 +15,11 @@ export default new Vuex.Store({
     snackbarObj: {},
     favorites: []
   },
+  getters: {
+    get: state => type => {
+      return state[type]
+    }
+  },
   mutations: {
     set(state, obj) {
       state[obj.name] = obj.value;

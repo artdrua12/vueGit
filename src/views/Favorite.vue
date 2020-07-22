@@ -52,12 +52,11 @@ export default {
   },
   computed: {
     favorites() {
-      return this.$store.state.favorites;
+      return this.$store.getters.get('favorites');
     }
   },
   methods: {
     deleteFavorite(item) {
-      // this.$store.commit("deleteFavorite", item);
        this.$store.dispatch("deleteFavorite", item);
     }
   }

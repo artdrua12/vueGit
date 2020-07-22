@@ -82,22 +82,22 @@ export default {
   },
   computed: {
     tabs() {
-      return this.$store.state.tabs;
+      return this.$store.getters.get('tabs');
     },
     snackbar: {
       get() {
-        return this.$store.state.snackbar;
+        return this.$store.getters.get('snackbar');
       },
       set(value) {
-        this.$store.commit("set", { name: "snackbar", value });
+        this.$store.commit('set', { name: "snackbar", value });
       }
     },
     snackbarObj() {
-      return this.$store.state.snackbarObj;
+      return this.$store.getters.get('snackbarObj');
     },
     tab: {
       get() {
-        return this.$store.state.tab;
+        return this.$store.getters.get('tab');
       },
       set(value) {
         this.$store.commit("setTab", value);

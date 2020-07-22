@@ -59,7 +59,7 @@ export default {
   },
   computed: {
     searchUsers() {
-      return this.$store.state.searchUsers;
+      return this.$store.getters.get('searchUsers');
     },
     length() {
       let count = this.searchUsers.total_count;
