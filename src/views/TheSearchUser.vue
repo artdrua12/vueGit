@@ -22,7 +22,14 @@
       ></v-select>
     </div>
     <div class="app__fullWidth">
-      <v-progress-circular v-if="loading" :key="loading" indeterminate :size="200" :width="15" color="yellow"></v-progress-circular>
+      <v-progress-circular
+        v-if="loading"
+        :key="loading"
+        indeterminate
+        :size="200"
+        :width="15"
+        color="yellow"
+      ></v-progress-circular>
     </div>
     <div v-for="item in searchUsers.items" :key="item.id" class="home__users">
       <h2>{{item.login}}</h2>
@@ -59,14 +66,15 @@ export default {
   },
   computed: {
     searchUsers() {
-      return this.$store.getters.get('searchUsers');
+      return this.$store.getters.get("searchUsers");
+    },
+    count() {
+      return this.searchUsers.total_count > 1000
+        ? 1000
+        : this.searchUsers.total_count;
     },
     length() {
-      let count = this.searchUsers.total_count;
-      if (count > 1000) {
-        count = 1000;
-      }
-      return Math.ceil(count / this.visible) || 0;
+      return Math.ceil(this.count / this.visible) || 0;
     }
   },
   methods: {
