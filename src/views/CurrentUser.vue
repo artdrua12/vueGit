@@ -1,5 +1,5 @@
 <template>
-  <div class="about app__main">
+  <div class="user app__main">
     <img :src="obj.avatar" width="150px" />
     <h1>{{obj.login}}</h1>
     <!-- <h3 v-for="item in repositories" :key="item.name">{{item.name}}</h3> -->
@@ -131,7 +131,7 @@ export default {
 </script>
 
 <style scoped>
-.about {
+.user {
   display: grid;
   grid-template-columns: auto 1fr;
   grid-template-rows: auto auto;

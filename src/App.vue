@@ -46,7 +46,7 @@
           <router-view></router-view>
         </v-tab-item>
         <v-tab-item v-for="item in tabs" :key="item.login">
-          <about :obj="item" />
+          <CurrentUser :obj="item"></CurrentUser>
         </v-tab-item>
       </v-tabs-items>
 
@@ -61,7 +61,7 @@
 </template>
 
 <script>
-import About from "@/views/About.vue";
+import CurrentUser from "@/views/CurrentUser.vue";
 export default {
   name: "App",
   data() {
@@ -82,22 +82,22 @@ export default {
   },
   computed: {
     tabs() {
-      return this.$store.getters.get('tabs');
+      return this.$store.getters.get("tabs");
     },
     snackbar: {
       get() {
-        return this.$store.getters.get('snackbar');
+        return this.$store.getters.get("snackbar");
       },
       set(value) {
-        this.$store.commit('set', { name: "snackbar", value });
+        this.$store.commit("set", { name: "snackbar", value });
       }
     },
     snackbarObj() {
-      return this.$store.getters.get('snackbarObj');
+      return this.$store.getters.get("snackbarObj");
     },
     tab: {
       get() {
-        return this.$store.getters.get('tab');
+        return this.$store.getters.get("tab");
       },
       set(value) {
         this.$store.commit("setTab", value);
@@ -105,7 +105,7 @@ export default {
     }
   },
   components: {
-    About
+    CurrentUser
   }
 };
 </script>

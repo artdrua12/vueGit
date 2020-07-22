@@ -1,19 +1,19 @@
 import Vue from 'vue'
 import VueRouter from 'vue-router'
-import Home from '../views/Home.vue'
+import TheSearchUser from '../views/TheSearchUser.vue'
 
 Vue.use(VueRouter)
 
 const routes = [
   {
     path: '/',
-    name: 'Home',
-    component: Home
+    name: 'search',
+    component: TheSearchUser
   },
   {
     name: 'favorite',
     path: '/favorite',
-    component: () => import(/* webpackChunkName: "favorite" */ '../views/Favorite.vue'),
+    component: () => import(/* webpackChunkName: "favorite" */ '../views/TheFavoriteFork.vue'),
   },
 ]
 
