@@ -1,14 +1,14 @@
 <template>
-  <div class="home app__main">
+  <div class="search app__main">
     <h1 class="app__fullWidth">Введите имя пользователя Git</h1>
-    <div class="app__fullWidth home__header">
+    <div class="app__fullWidth search__header">
       <v-text-field
         v-model="users"
         :rules="nameRules"
         :counter="12"
         label="Имя в Git"
         required
-        class="home__users"
+        class="search__users"
         placeholder="Начните вводить имя, данные подгрузятся авноматически"
         @keyup.self="keyup"
       ></v-text-field>
@@ -18,11 +18,11 @@
         v-model="visible"
         @change="keyup"
         label="Количество"
-        class="home__select"
+        class="search__select"
       ></v-select>
     </div>
-    <div class="app__fullWidth home__progress">
-      <v-progress-circular v-if="loading" indeterminate :size="200" :width="15" color="yellow"></v-progress-circular>
+    <div class="app__fullWidth">
+      <v-progress-circular v-if="loading" :key="loading" indeterminate :size="200" :width="15" color="yellow"></v-progress-circular>
     </div>
     <div v-for="item in searchUsers.items" :key="item.id" class="home__users">
       <h2>{{item.login}}</h2>
@@ -106,7 +106,7 @@ export default {
 </script>
 
 <style scoped>
-.home {
+.search {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
   grid-template-rows: 1fr, auto;
@@ -115,18 +115,18 @@ export default {
   align-content: flex-start;
   text-align: center;
 }
-.home__header {
+.search__header {
   width: 100%;
   display: flex;
   flex-wrap: wrap;
   justify-content: space-evenly;
   align-items: center;
 }
-.home__users {
+.search__users {
   flex: 4 1 400px;
   margin-right: auto;
 }
-.home__select {
+.search__select {
   flex: 1 0 40px;
 }
 </style>
