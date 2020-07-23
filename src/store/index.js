@@ -11,9 +11,8 @@ export default new Vuex.Store({
     tabs: [],
     tab: 0,
     fork: [],
-    snackbar: false,
-    snackbarObj: {},
-    favorites: []
+    favorites: [],
+    message: { color: 'info', text: 'default', run: false }
   },
   getters: {
     get: state => type => {
@@ -44,16 +43,14 @@ export default new Vuex.Store({
     },
     setFavorite(state, obj) {
       state.favorites.push(obj);
-      state.snackbarObj = { color: 'success', text: 'Добавлено в избранное' };
-      state.snackbar = true;
+      state.message = { color: 'success', text: 'Добавлено в избранное', run: true }
     },
     deleteFavorite(state, obj) {
       const i = state.favorites.findIndex(item => item.id == obj.id);
       Vue.delete(state.favorites, i);
     },
-    setSnackbar(state, obj) {
-      state.snackbarObj = obj;
-      state.snackbar = true;
+    setMessage(state, obj) {
+      Vue.set(state, 'message', obj);
     }
   },
   actions: {
@@ -65,7 +62,7 @@ export default new Vuex.Store({
         const res = await response.json();
         commit('set', { name: 'searchUsers', value: res });
       } catch (e) {
-        commit("setSnackbar", { color: 'error', text: 'Ошибка запроса' });
+        commit('setMessage', { color: 'error', text: 'Ошибка запроса', run: true });
       }
     },
 
@@ -77,7 +74,7 @@ export default new Vuex.Store({
         const res = await response.json();
         commit('setRepositories', { name: 'repositories', value: res });
       } catch (e) {
-        commit("setSnackbar", { color: 'error', text: 'Ошибка запроса' });
+        commit('setMessage', { color: 'error', text: 'Ошибка запроса', run: true });
       }
     },
 
@@ -89,7 +86,7 @@ export default new Vuex.Store({
         const res = await response.json();
         commit('set', { name: 'forks', value: res });
       } catch (e) {
-        commit('setSnackbar', { color: 'error', text: 'Ошибка запроса' });
+        commit('setMessage', { color: 'error', text: 'Ошибка запроса', run: true });
       }
     },
 
@@ -100,10 +97,10 @@ export default new Vuex.Store({
         try {
           await fb.database().ref('forks').push(obj);
         } catch (e) {
-          commit("setSnackbar", { color: 'error', text: 'Ошибка записи в FireBase' });
+          commit('setMessage', { color: 'error', text: 'Ошибка записи в FireBase', run: true });
         }
       } else {
-        commit("setSnackbar", { color: 'info', text: 'Fork уже добавлен' });
+        commit('setMessage', { color: 'info', text: 'Fork уже добавлен', run: true });
       }
     },
     async getFireBase({ commit, state }) {
@@ -112,7 +109,7 @@ export default new Vuex.Store({
         const fbData = await fb.database().ref('forks').once('value')
         forksData = fbData.val();
       } catch{
-        commit("setSnackbar", { color: 'info', text: 'Ошибка чтения из FireBase' });
+        commit('setMessage', { color: 'error', text: 'Ошибка чтения из FireBase', run: true });
       }
       if (forksData == null) return
 
@@ -126,7 +123,7 @@ export default new Vuex.Store({
         await fb.database().ref('forks').child(obj.fbKey).remove();
         commit('deleteFavorite', obj);
       } catch (e) {
-        commit("setSnackbar", { color: 'error', text: 'Ошибка доступа к FireBase' });
+        commit('setMessage', { color: 'error', text: 'Ошибка доступа к FireBase', run: true });
       }
     }
   }

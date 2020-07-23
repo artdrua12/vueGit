@@ -50,8 +50,8 @@
         </v-tab-item>
       </v-tabs-items>
 
-      <v-snackbar v-model="snackbar" :color="snackbarObj.color" :timeout="3000" right="right">
-        {{snackbarObj.text}}
+      <v-snackbar v-model="snackbar.run" :color="snackbar.color" :timeout="3000" right="right">
+        {{snackbar.text}}
         <template v-slot:action="{ attrs }">
           <v-btn dark text v-bind="attrs" @click="snackbar = false">Close</v-btn>
         </template>
@@ -66,7 +66,7 @@ export default {
   name: "App",
   data() {
     return {
-      collapseOnScroll: true
+      collapseOnScroll: true,
     };
   },
   methods: {
@@ -75,7 +75,7 @@ export default {
     },
     toHome() {
       this.$store.commit("setTab", 0);
-    }
+    },
   },
   mounted() {
     this.$store.dispatch("getFireBase");
@@ -86,27 +86,27 @@ export default {
     },
     snackbar: {
       get() {
-        return this.$store.getters.get("snackbar");
+        return this.$store.getters.get("message");
       },
-      set(value) {
-        this.$store.commit("set", { name: "snackbar", value });
-      }
+      set() {
+        this.$store.commit('setMessange', { color: '', text: '', run: false });
+      },
     },
-    snackbarObj() {
-      return this.$store.getters.get("snackbarObj");
-    },
+    // snackbarObj() {
+    //   return this.$store.getters.get("snackbarObj");
+    // },
     tab: {
       get() {
         return this.$store.getters.get("tab");
       },
       set(value) {
         this.$store.commit("setTab", value);
-      }
-    }
+      },
+    },
   },
   components: {
-    CurrentUser
-  }
+    CurrentUser,
+  },
 };
 </script>
 <style>

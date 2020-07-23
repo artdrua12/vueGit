@@ -110,10 +110,6 @@ export default {
         this.loading = false;
       } catch (e) {
         console.log(e);
-        this.$store.commit("setSnackbar", {
-          color: "error",
-          text: "Ошибка запроса"
-        });
       } finally {
         this.loading = false;
       }
