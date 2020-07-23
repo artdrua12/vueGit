@@ -14,13 +14,13 @@
 
       <v-spacer></v-spacer>
 
-      <router-link active-class="active" exact to="/">
+      <router-link active-class="active" exact to="">
         <v-btn class="ma-2" tile outlined @click="toHome">
           <v-icon color="success" left>mdi-magnify</v-icon>Поиск пользователей
         </v-btn>
       </router-link>
 
-      <router-link active-class="active" exact to="favorite">
+      <router-link active-class="active" exact to="/favorite">
         <v-btn class="ma-2" tile outlined @click="toHome">
           <v-icon color="red" left>mdi-heart</v-icon>Избранные forks
         </v-btn>
@@ -42,7 +42,7 @@
 
     <v-main>
       <v-tabs-items v-model="tab">
-        <v-tab-item key="home">
+        <v-tab-item key="home2">
           <router-view></router-view>
         </v-tab-item>
         <v-tab-item v-for="item in tabs" :key="item.login">
