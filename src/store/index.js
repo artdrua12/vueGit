@@ -23,6 +23,7 @@ export default new Vuex.Store({
     set(state, obj) {
       state[obj.name] = obj.value;
     },
+    
     setTabs(state, obj) {
       const dublicate = state.tabs.findIndex(item => item.login == obj.login);
       if (dublicate == -1) {
@@ -32,15 +33,18 @@ export default new Vuex.Store({
         Vue.set(state, 'tab', dublicate + 1);
       }
     },
+
     setRepositories(state, obj) {
       Vue.set(state.repositories, obj.name, obj.value)
     },
+
     setTab(state, value) {
       Vue.set(state, 'tab', value)
     },
     deleteTabs(state, i) {
       state.tabs.splice(i, 1);
     },
+
     setFavorite(state, obj) {
       state.favorites.push(obj);
       state.message = { color: 'success', text: 'Добавлено в избранное', run: true }
@@ -49,6 +53,7 @@ export default new Vuex.Store({
       const i = state.favorites.findIndex(item => item.id == obj.id);
       Vue.delete(state.favorites, i);
     },
+
     setMessage(state, obj) {
       Vue.set(state, 'message', obj);
     }
@@ -98,6 +103,7 @@ export default new Vuex.Store({
           await fb.database().ref('forks').push(obj);
         } catch (e) {
           commit('setMessage', { color: 'error', text: 'Ошибка записи в FireBase', run: true });
+          commit('deleteFavorite', obj); // если ошибка записи в FireBase
         }
       } else {
         commit('setMessage', { color: 'info', text: 'Fork уже добавлен', run: true });
