@@ -14,13 +14,13 @@
 
       <v-spacer></v-spacer>
 
-      <router-link active-class="active" exact to="">
+      <router-link active-class="active" exact to="./">
         <v-btn class="ma-2" tile outlined @click="toHome">
           <v-icon color="success" left>mdi-magnify</v-icon>Поиск пользователей
         </v-btn>
       </router-link>
 
-      <router-link active-class="active" exact to="/favorite">
+      <router-link active-class="active" exact to="./favorite">
         <v-btn class="ma-2" tile outlined @click="toHome">
           <v-icon color="red" left>mdi-heart</v-icon>Избранные forks
         </v-btn>
@@ -92,9 +92,6 @@ export default {
         this.$store.commit('setMessange', { color: '', text: '', run: false });
       },
     },
-    // snackbarObj() {
-    //   return this.$store.getters.get("snackbarObj");
-    // },
     tab: {
       get() {
         return this.$store.getters.get("tab");
